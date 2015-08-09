@@ -1,0 +1,50 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.pohguan.wallpaper"
+    android:versionCode="1"
+    android:versionName="1.0">
+
+    <application android:allowBackup="true" android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher" android:theme="@style/AppTheme">
+
+        <service
+            android:name="DayNightWallpaperService"
+            android:enabled="true"
+            android:label="Wallpaper Example"
+            android:permission="android.permission.BIND_WALLPAPER" >
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" >
+                </action>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/mywallpaper" >
+            </meta-data>
+        </service>
+        <activity
+            android:name=".WallpaperPreferencesActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Light.WallpaperSettings" >
+            <intent-filter>
+                <category android:name="android.intent.category.PREFERENCE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".SetWallpaperActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Light.WallpaperSettings" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+    <uses-feature
+        android:name="android.software.live_wallpaper"
+        android:required="true" >
+    </uses-feature>
+
+</manifest>
