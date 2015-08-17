@@ -19,8 +19,10 @@ public class SetWallpaperActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        startActivity(new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER));
-        finish();
+        Intent intent = new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
+        intent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                new ComponentName(this, DayNightWallpaperService.class));
+        startActivityForResult(intent, cRequestSetWallpaper);
     }
 
     public void onClick(View view) {
@@ -28,5 +30,13 @@ public class SetWallpaperActivity extends Activity {
         intent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
                 new ComponentName(this, DayNightWallpaperService.class));
         startActivity(intent);*/
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == cRequestSetWallpaper) {
+            finish();
+        }
     }
 }

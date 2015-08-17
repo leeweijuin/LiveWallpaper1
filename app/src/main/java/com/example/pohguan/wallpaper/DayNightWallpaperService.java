@@ -3,9 +3,12 @@ package com.example.pohguan.wallpaper;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.RadialGradient;
+import android.graphics.Shader;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
@@ -132,19 +135,12 @@ public class DayNightWallpaperService extends WallpaperService {
             try {
                 canvas = holder.lockCanvas();
                 if (canvas != null) {
-                    int[] colors = {0xFFFFFFFF, getCurrentColor()};
-                    GradientDrawable grad = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
-                    grad.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-                    grad.setGradientType(GradientDrawable.RADIAL_GRADIENT);
-                    grad.setGradientRadius(canvas.getWidth());
-                    grad.setGradientCenter(backgroundCenterX, backgroundCenterY);
-                    grad.setColorFilter(0x77000022, PorterDuff.Mode.SRC_ATOP);
-                    grad.draw(canvas);
+                    canvas.drawColor(getResources().getColor(android.R.color.black));
 
-                    ShapeDrawable shape1 = new ShapeDrawable(new OvalShape());
-                    shape1.setBounds(0, 0, canvas.getWidth()/2, canvas.getHeight()/2);
-                    shape1.getPaint().setColor(0x01FF0000);
-                    shape1.draw(canvas);
+                    drawBgGradient(canvas);
+                    drawMoon(canvas);
+                    drawMountain(canvas, canvas.getWidth()/2, 2 * canvas.getHeight() / 3, canvas.getWidth() / 2, canvas.getHeight()/6);
+                    drawMountain(canvas, 0, 2*canvas.getHeight()/3, 2*canvas.getWidth()/3, canvas.getHeight()/5);
 
                     updateCurrentColor();
                     updateCurrentBgCenter();
@@ -156,6 +152,56 @@ public class DayNightWallpaperService extends WallpaperService {
 
             handler.removeCallbacks(drawRunner);
             handler.postDelayed(drawRunner, cbInterval);
+        }
+
+
+        /*
+         * Draw Background Gradient.
+         */
+        private void drawBgGradient(Canvas canvas) {
+            int[] colors = {getResources().getColor(android.R.color.white), getCurrentColor()};
+            GradientDrawable grad = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            grad.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            grad.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+            grad.setGradientRadius(canvas.getWidth());
+            grad.setGradientCenter(backgroundCenterX, backgroundCenterY);
+            grad.setColorFilter(0x77000022, PorterDuff.Mode.SRC_ATOP);
+            grad.draw(canvas);
+        }
+
+
+        /*
+         * Draw moon
+         */
+        private void drawMoon(Canvas canvas) {
+            ShapeDrawable moon = new ShapeDrawable(new OvalShape());
+            int radius = canvas.getWidth()/4;
+            moon.setBounds(radius, radius, 3 * radius, 3 * radius);
+            moon.getPaint().setColor(0xFF888822);
+            moon.draw(canvas);
+        }
+
+
+        /*
+         * Draw mountains
+         */
+        private void drawMountain(Canvas canvas, int x, int y, int width, int height) {
+            Path mountain = new Path();
+            mountain.moveTo(x, y);
+            mountain.lineTo(x + width/2, y-height);
+            mountain.lineTo(x + width, y);
+            mountain.close();
+
+            /*Paint paint = new Paint();
+            paint.setColor(Color.DKGRAY);
+            paint.setStrokeWidth(3);
+            paint.setStyle(Paint.Style.STROKE);
+*/
+            int darkGreen = getResources().getColor(R.color.dark_green);
+            Paint p = new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
+            p.setColor(0xff800000);
+            p.setShader(new LinearGradient(x+width/2, y, x+width/2, y-height,0xff000000,darkGreen, Shader.TileMode.CLAMP));
+            canvas.drawPath(mountain, p);
         }
 
 
