@@ -1,24 +1,24 @@
 package com.example.pohguan.wallpaper;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
-import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -53,9 +53,9 @@ public class DayNightWallpaperService extends WallpaperService {
         private boolean visible;
 
         /*
-         * Callback interval (in milliseconds).
+         * Frame rate (in milliseconds).
          */
-        private int cbInterval;
+        private int frameRate;
 
         /*
          * Current color
@@ -77,19 +77,26 @@ public class DayNightWallpaperService extends WallpaperService {
          */
         private float backgroundCenterY;
 
+        /*
+         * Animation drawers
+         */
+        private List<BitmapAnimationDrawer> animations;
+
         /**
          * Constructor.
          */
         public DayNightWallpaperEngine( ){
-            cbInterval = 10;
+            frameRate = 30;
             currentRed = 60;
             currentGreen = 60;
             currentBlue = 60;
             goingUp = true;
             backgroundCenterX = 0f;
             backgroundCenterY = 0f;
+            setupAnimations();
             handler.post(drawRunner);
         }
+
 
         @Override
         public void onVisibilityChanged(boolean visible) {
@@ -101,6 +108,7 @@ public class DayNightWallpaperService extends WallpaperService {
             }
         }
 
+
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder) {
             super.onSurfaceDestroyed(holder);
@@ -108,11 +116,13 @@ public class DayNightWallpaperService extends WallpaperService {
             handler.removeCallbacks(drawRunner);
         }
 
+
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format,
                                      int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
         }
+
 
         @Override
         public void onTouchEvent(MotionEvent event) {
@@ -139,8 +149,9 @@ public class DayNightWallpaperService extends WallpaperService {
 
                     drawBgGradient(canvas);
                     drawMoon(canvas);
-                    drawMountain(canvas, canvas.getWidth()/2, 2 * canvas.getHeight() / 3, canvas.getWidth() / 2, canvas.getHeight()/6);
-                    drawMountain(canvas, 0, 2*canvas.getHeight()/3, 2*canvas.getWidth()/3, canvas.getHeight()/5);
+                    drawMountain(canvas, canvas.getWidth() / 2, 2 * canvas.getHeight() / 3, canvas.getWidth() / 2, canvas.getHeight() / 6);
+                    drawMountain(canvas, 0, 2 * canvas.getHeight() / 3, 2 * canvas.getWidth() / 3, canvas.getHeight() / 5);
+                    drawBitmaps(canvas);
 
                     updateCurrentColor();
                     updateCurrentBgCenter();
@@ -151,7 +162,17 @@ public class DayNightWallpaperService extends WallpaperService {
             }
 
             handler.removeCallbacks(drawRunner);
-            handler.postDelayed(drawRunner, cbInterval);
+            handler.postDelayed(drawRunner, frameRate);
+        }
+
+
+        /*
+         * Draw bitmaps.
+         */
+        private void drawBitmaps(Canvas canvas) {
+            for (int i=0; i<animations.size(); i++) {
+                animations.get(i).drawFrame(canvas);
+            }
         }
 
 
@@ -200,10 +221,35 @@ public class DayNightWallpaperService extends WallpaperService {
             int darkGreen = getResources().getColor(R.color.dark_green);
             Paint p = new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
             p.setColor(0xff800000);
-            p.setShader(new LinearGradient(x+width/2, y, x+width/2, y-height,0xff000000,darkGreen, Shader.TileMode.CLAMP));
+            p.setShader(new LinearGradient(x+width/2, y, x+width/2, y-height, Color.BLACK, darkGreen, Shader.TileMode.CLAMP));
             canvas.drawPath(mountain, p);
         }
 
+
+        /*
+         * Setup animation.
+         */
+        private void setupAnimations() {
+            BitmapAnimationDrawer cloudDrawer = new BitmapAnimationDrawer(frameRate);
+            Bitmap cloud = BitmapFactory.decodeResource(getResources(), R.drawable.cloud);
+            cloudDrawer.addFrame(cloud, 20, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 30, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 40, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 50, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 60, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 70, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 80, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 90, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 100, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 110, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 120, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 130, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 140, 180, frameRate);
+            cloudDrawer.addFrame(cloud, 150, 180, frameRate);
+
+            animations = new ArrayList<>();
+            animations.add(cloudDrawer);
+        }
 
         /*
          * Current color.
