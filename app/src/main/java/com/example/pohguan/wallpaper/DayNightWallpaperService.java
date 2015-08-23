@@ -230,26 +230,18 @@ public class DayNightWallpaperService extends WallpaperService {
          * Setup animation.
          */
         private void setupAnimations() {
-            BitmapAnimationDrawer cloudDrawer = new BitmapAnimationDrawer(frameRate);
             Bitmap cloud = BitmapFactory.decodeResource(getResources(), R.drawable.cloud);
-            cloudDrawer.addFrame(cloud, 20, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 30, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 40, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 50, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 60, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 70, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 80, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 90, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 100, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 110, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 120, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 130, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 140, 180, frameRate);
-            cloudDrawer.addFrame(cloud, 150, 180, frameRate);
+            Bitmap sailboat = BitmapFactory.decodeResource(getResources(), R.drawable.sailboat);
+            SingleBitmapAnimationDrawer cloudDrawer = new SingleBitmapAnimationDrawer(cloud, -200, 220, 5, 0);
+            SingleBitmapAnimationDrawer cloudDrawer2 = new SingleBitmapAnimationDrawer(cloud, -800, 420, 8, 0);
+            SingleBitmapAnimationDrawer sailboatDrawer = new SingleBitmapAnimationDrawer(sailboat, -200, 1000, 8, 0);
 
             animations = new ArrayList<>();
             animations.add(cloudDrawer);
+            animations.add(cloudDrawer2);
+            animations.add(sailboatDrawer);
         }
+
 
         /*
          * Current color.
