@@ -14,6 +14,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
+import android.util.LruCache;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -82,6 +83,11 @@ public class DayNightWallpaperService extends WallpaperService {
          */
         private List<BitmapAnimationDrawer> animations;
 
+        /*
+         * Randomizer drawers
+         */
+        private SingleBitmapRandomizerDrawer butterflyDrawer;
+
         /**
          * Constructor.
          */
@@ -93,7 +99,8 @@ public class DayNightWallpaperService extends WallpaperService {
             goingUp = true;
             backgroundCenterX = 0f;
             backgroundCenterY = 0f;
-            setupAnimations();
+//            setupAnimations();
+            setupRandomizer();
             handler.post(drawRunner);
         }
 
@@ -148,10 +155,14 @@ public class DayNightWallpaperService extends WallpaperService {
                     canvas.drawColor(getResources().getColor(android.R.color.black));
 
                     drawBgGradient(canvas);
+/*
                     drawMoon(canvas);
                     drawMountain(canvas, canvas.getWidth() / 2, 2 * canvas.getHeight() / 3, canvas.getWidth() / 2, canvas.getHeight() / 6);
                     drawMountain(canvas, 0, 2 * canvas.getHeight() / 3, 2 * canvas.getWidth() / 3, canvas.getHeight() / 5);
                     drawBitmaps(canvas);
+*/
+
+                    drawButterflies(canvas);
 
                     updateCurrentColor();
                     updateCurrentBgCenter();
@@ -173,6 +184,14 @@ public class DayNightWallpaperService extends WallpaperService {
             for (int i=0; i<animations.size(); i++) {
                 animations.get(i).drawFrame(canvas);
             }
+        }
+
+
+        /*
+         * Draw butterflies.
+         */
+        private void drawButterflies(Canvas canvas) {
+            butterflyDrawer.drawFrame(canvas);
         }
 
 
@@ -213,15 +232,10 @@ public class DayNightWallpaperService extends WallpaperService {
             mountain.lineTo(x + width, y);
             mountain.close();
 
-            /*Paint paint = new Paint();
-            paint.setColor(Color.DKGRAY);
-            paint.setStrokeWidth(3);
-            paint.setStyle(Paint.Style.STROKE);
-*/
             int darkGreen = getResources().getColor(R.color.dark_green);
             Paint p = new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
             p.setColor(0xff800000);
-            p.setShader(new LinearGradient(x+width/2, y, x+width/2, y-height, Color.BLACK, darkGreen, Shader.TileMode.CLAMP));
+            p.setShader(new LinearGradient(x + width / 2, y, x + width / 2, y - height, Color.BLACK, darkGreen, Shader.TileMode.CLAMP));
             canvas.drawPath(mountain, p);
         }
 
@@ -232,14 +246,24 @@ public class DayNightWallpaperService extends WallpaperService {
         private void setupAnimations() {
             Bitmap cloud = BitmapFactory.decodeResource(getResources(), R.drawable.cloud);
             Bitmap sailboat = BitmapFactory.decodeResource(getResources(), R.drawable.sailboat);
-            SingleBitmapAnimationDrawer cloudDrawer = new SingleBitmapAnimationDrawer(cloud, -200, 220, 5, 0);
-            SingleBitmapAnimationDrawer cloudDrawer2 = new SingleBitmapAnimationDrawer(cloud, -800, 420, 8, 0);
-            SingleBitmapAnimationDrawer sailboatDrawer = new SingleBitmapAnimationDrawer(sailboat, -200, 1000, 8, 0);
+
+            SingleBitmapAnimationDrawer cloudDrawer = new SingleBitmapAnimationDrawer(cloud, -cloud.getWidth(), 220, 5, 0);
+            SingleBitmapAnimationDrawer cloudDrawer2 = new SingleBitmapAnimationDrawer(cloud, -cloud.getWidth()*3, 420, 8, 0);
+            SingleBitmapAnimationDrawer sailboatDrawer = new SingleBitmapAnimationDrawer(sailboat, -sailboat.getWidth(), 1000, 8, 0);
 
             animations = new ArrayList<>();
             animations.add(cloudDrawer);
             animations.add(cloudDrawer2);
             animations.add(sailboatDrawer);
+        }
+
+
+        /*
+        * Setup randomizers.
+        */
+        private void setupRandomizer() {
+            Bitmap butterfly = BitmapFactory.decodeResource(getResources(), R.drawable.butterfly);
+            butterflyDrawer = new SingleBitmapRandomizerDrawer(butterfly, 0, 0);
         }
 
 

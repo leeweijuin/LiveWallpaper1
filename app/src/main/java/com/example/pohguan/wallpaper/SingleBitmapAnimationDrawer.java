@@ -59,7 +59,7 @@ public class SingleBitmapAnimationDrawer implements BitmapAnimationDrawer {
      * Draw frame.
      */
     public void drawFrame(Canvas canvas) {
-        canvas.drawBitmap(bm, left, top, null);
+        canvas.drawBitmap(this.bm, left, top, null);
         updatePos(canvas);
     }
 
