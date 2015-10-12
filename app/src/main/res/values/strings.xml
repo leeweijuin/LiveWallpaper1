@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Wallpaper</string>
     <string name="wallpaper_description">Adaptive Wallpaper</string>
+    <string name="store_link">More awesome wallpapers</string>
+    <string name="butterfly">Butterfly</string>
+    <string name="dragonfly">Dragonfly</string>
 </resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="patternOptions">
+        <item>@string/butterfly</item>
+        <item>@string/dragonfly</item>
+    </string-array>
+    <string-array name="patternValues">
+        <item>butterflyKey</item>
+        <item>dragonflyKey</item>
+    </string-array>
+</resources>

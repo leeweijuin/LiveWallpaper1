@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:title="Inline Preferences">
+    <ListPreference
+        android:key="choice"
+        android:title="Pattern"
+        android:entries="@array/patternOptions"
+        android:entryValues="@array/patternValues"
+        android:defaultValue="butterflyKey"/>
 
-        <CheckBoxPreference
-            android:key="enableTouch"
-            android:title="Enable Touch"
-            android:summary="ET summary" />
 
-        <EditTextPreference
-            android:key="numberOfCircles"
-            android:title="Number of Circles"
-            android:summary="NOC Summary" />
+    <Preference android:title="@string/store_link" >
+        <intent android:action="android.intent.action.VIEW"
+            android:data="http://www.android.com" />
+    </Preference>
 
-    </PreferenceCategory>
 </PreferenceScreen>

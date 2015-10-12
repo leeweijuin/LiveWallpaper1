@@ -15,19 +15,9 @@ public class WallpaperPreferencesActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-  /*    //This can be used if you don't prefer the header version
+
          getFragmentManager().beginTransaction().replace(android.R.id.content,
                 new GraphicPrefFragment()).commit();
-  */  }
-
-
-    /**
-     * Populate the activity with the top-level headers.
-     */
-    @Override
-    public void onBuildHeaders(List<Header> target) {
-        super.onBuildHeaders(target);
-        loadHeadersFromResource(R.xml.preference_headers, target);
     }
 
     /**
@@ -41,7 +31,7 @@ public class WallpaperPreferencesActivity extends PreferenceActivity {
             // Make sure default values are applied.  In a real app, you would
             // want this in a shared function that is used to retrieve the
             // SharedPreferences wherever they are needed.
-/*
+/* TODO
             PreferenceManager.setDefaultValues(getActivity(),
                     R.xml.prefs, false);
 */
