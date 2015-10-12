@@ -14,11 +14,11 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
-import android.util.LruCache;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -79,6 +79,16 @@ public class DayNightWallpaperService extends WallpaperService {
         private float backgroundCenterY;
 
         /*
+        * gradient background.
+        */
+        private GradientBackground gb;
+
+        /*
+        * Test count.
+        */
+        private int testCount;
+
+        /*
          * Animation drawers
          */
         private List<BitmapAnimationDrawer> animations;
@@ -92,10 +102,8 @@ public class DayNightWallpaperService extends WallpaperService {
          * Constructor.
          */
         public DayNightWallpaperEngine( ){
-            frameRate = 30;
-            currentRed = 60;
-            currentGreen = 60;
-            currentBlue = 60;
+            frameRate = 100;
+            gb = new ButterflyGradientBackground();
             goingUp = true;
             backgroundCenterX = 0f;
             backgroundCenterY = 0f;
@@ -143,18 +151,43 @@ public class DayNightWallpaperService extends WallpaperService {
         }
 
 
+        /*
+         * Get hour.
+         */
+        public int getHour() {
+            Calendar c = Calendar.getInstance();
+            return testCount/60;
+        }
+
+
+        /*
+        * Get minute.
+        */
+        public int getMinute() {
+            return testCount % 60;
+        }
+
         /**
          * Draw generic.
          */
         private void draw() {
             SurfaceHolder holder = getSurfaceHolder();
             Canvas canvas = null;
+
+            if (testCount == 1440) testCount = 0;
+            else testCount+=10;
+
             try {
                 canvas = holder.lockCanvas();
                 if (canvas != null) {
-                    canvas.drawColor(getResources().getColor(android.R.color.black));
+                    //canvas.drawColor(getResources().getColor(android.R.color.black));
+                    canvas.drawColor(Color.argb(gb.getAlpha(getHour(), getMinute()), 0, 0, 0));
+                    int[] colors = gb.getCurrentGradientColor(getHour(), getMinute());
 
-                    drawBgGradient(canvas);
+                    GradientDrawable grad = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+                    grad.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                    grad.draw(canvas);
+
 /*
                     drawMoon(canvas);
                     drawMountain(canvas, canvas.getWidth() / 2, 2 * canvas.getHeight() / 3, canvas.getWidth() / 2, canvas.getHeight() / 6);
@@ -244,7 +277,7 @@ public class DayNightWallpaperService extends WallpaperService {
          * Setup animation.
          */
         private void setupAnimations() {
-            Bitmap cloud = BitmapFactory.decodeResource(getResources(), R.drawable.cloud);
+            Bitmap cloud = BitmapFactory.decodeResource(getResources(), R.drawable.butterfly);
             Bitmap sailboat = BitmapFactory.decodeResource(getResources(), R.drawable.sailboat);
 
             SingleBitmapAnimationDrawer cloudDrawer = new SingleBitmapAnimationDrawer(cloud, -cloud.getWidth(), 220, 5, 0);
