@@ -1,5 +1,6 @@
 package com.example.pohguan.wallpaper;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -13,7 +14,9 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -32,7 +35,7 @@ public class DayNightWallpaperService extends WallpaperService {
         return new DayNightWallpaperEngine();
     }
 
-    private class DayNightWallpaperEngine extends Engine {
+    private class DayNightWallpaperEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener  {
         /**
          * Handler.
          */
@@ -98,6 +101,11 @@ public class DayNightWallpaperService extends WallpaperService {
          */
         private SingleBitmapRandomizerDrawer butterflyDrawer;
 
+        /*
+         * pattern key.
+         */
+        public static final String KEY_PREF_CHOICE = "choice";
+
         /**
          * Constructor.
          */
@@ -108,7 +116,9 @@ public class DayNightWallpaperService extends WallpaperService {
             backgroundCenterX = 0f;
             backgroundCenterY = 0f;
 //            setupAnimations();
-            setupRandomizer();
+            SharedPreferences prefs = PreferenceManager
+                    .getDefaultSharedPreferences(DayNightWallpaperService.this);
+            setupRandomizer(prefs.getString(KEY_PREF_CHOICE, "butterflyKey"));
             handler.post(drawRunner);
         }
 
@@ -116,9 +126,14 @@ public class DayNightWallpaperService extends WallpaperService {
         @Override
         public void onVisibilityChanged(boolean visible) {
             super.onVisibilityChanged(visible);
+            SharedPreferences prefs = PreferenceManager
+                    .getDefaultSharedPreferences(DayNightWallpaperService.this);
+
             if (visible) {
+                prefs.unregisterOnSharedPreferenceChangeListener(this);
                 handler.post(drawRunner);
             } else {
+                prefs.registerOnSharedPreferenceChangeListener(this);
                 handler.removeCallbacks(drawRunner);
             }
         }
@@ -294,9 +309,16 @@ public class DayNightWallpaperService extends WallpaperService {
         /*
         * Setup randomizers.
         */
-        private void setupRandomizer() {
-            Bitmap butterfly = BitmapFactory.decodeResource(getResources(), R.drawable.butterfly);
-            butterflyDrawer = new SingleBitmapRandomizerDrawer(butterfly, 0, 0);
+        private void setupRandomizer(String choice) {
+            if (choice.equals("butterflyKey")) {
+                Bitmap butterfly = BitmapFactory.decodeResource(getResources(), R.drawable.butterfly);
+                butterflyDrawer = new SingleBitmapRandomizerDrawer(butterfly, 0, 0);
+            } else if (choice.equals("dragonflyKey")) {
+                Bitmap dragonfly = BitmapFactory.decodeResource(getResources(), R.drawable.dragonfly);
+                butterflyDrawer = new SingleBitmapRandomizerDrawer(dragonfly, 0, 0);
+            } else {
+                Log.d("Choice not found: ", choice);
+            }
         }
 
 
@@ -353,6 +375,13 @@ public class DayNightWallpaperService extends WallpaperService {
                 backgroundCenterX -= 0.01f;
             }
 
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals(KEY_PREF_CHOICE)) {
+                setupRandomizer(sharedPreferences.getString(KEY_PREF_CHOICE, "butterflyKey"));
+            }
         }
     }
 }

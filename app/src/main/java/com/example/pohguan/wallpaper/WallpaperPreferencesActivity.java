@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 
 import java.util.List;
 
@@ -31,10 +32,8 @@ public class WallpaperPreferencesActivity extends PreferenceActivity {
             // Make sure default values are applied.  In a real app, you would
             // want this in a shared function that is used to retrieve the
             // SharedPreferences wherever they are needed.
-/* TODO
             PreferenceManager.setDefaultValues(getActivity(),
                     R.xml.prefs, false);
-*/
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.prefs);
