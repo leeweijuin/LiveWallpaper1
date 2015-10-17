@@ -5,14 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.Shader;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
@@ -62,26 +55,6 @@ public class DayNightWallpaperService extends WallpaperService {
         private int frameRate;
 
         /*
-         * Current color
-         */
-        private int currentRed, currentGreen, currentBlue;
-
-        /*
-         * Color increasing?
-         */
-        private boolean goingUp;
-
-        /*
-         * backgroundCenterX.
-         */
-        private float backgroundCenterX;
-
-        /*
-         * backgroundCenterY.
-         */
-        private float backgroundCenterY;
-
-        /*
         * gradient background.
         */
         private GradientBackground gb;
@@ -112,9 +85,6 @@ public class DayNightWallpaperService extends WallpaperService {
         public DayNightWallpaperEngine( ){
             frameRate = 100;
             gb = new ButterflyGradientBackground();
-            goingUp = true;
-            backgroundCenterX = 0f;
-            backgroundCenterY = 0f;
 //            setupAnimations();
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(DayNightWallpaperService.this);
@@ -203,17 +173,7 @@ public class DayNightWallpaperService extends WallpaperService {
                     grad.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
                     grad.draw(canvas);
 
-/*
-                    drawMoon(canvas);
-                    drawMountain(canvas, canvas.getWidth() / 2, 2 * canvas.getHeight() / 3, canvas.getWidth() / 2, canvas.getHeight() / 6);
-                    drawMountain(canvas, 0, 2 * canvas.getHeight() / 3, 2 * canvas.getWidth() / 3, canvas.getHeight() / 5);
-                    drawBitmaps(canvas);
-*/
-
                     drawButterflies(canvas);
-
-                    updateCurrentColor();
-                    updateCurrentBgCenter();
                 }
             } finally {
                 if (canvas != null)
@@ -240,51 +200,6 @@ public class DayNightWallpaperService extends WallpaperService {
          */
         private void drawButterflies(Canvas canvas) {
             butterflyDrawer.drawFrame(canvas);
-        }
-
-
-        /*
-         * Draw Background Gradient.
-         */
-        private void drawBgGradient(Canvas canvas) {
-            int[] colors = {getResources().getColor(android.R.color.white), getCurrentColor()};
-            GradientDrawable grad = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
-            grad.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-            grad.setGradientType(GradientDrawable.RADIAL_GRADIENT);
-            grad.setGradientRadius(canvas.getWidth());
-            grad.setGradientCenter(backgroundCenterX, backgroundCenterY);
-            grad.setColorFilter(0x77000022, PorterDuff.Mode.SRC_ATOP);
-            grad.draw(canvas);
-        }
-
-
-        /*
-         * Draw moon
-         */
-        private void drawMoon(Canvas canvas) {
-            ShapeDrawable moon = new ShapeDrawable(new OvalShape());
-            int radius = canvas.getWidth()/4;
-            moon.setBounds(radius, radius, 3 * radius, 3 * radius);
-            moon.getPaint().setColor(0xFF888822);
-            moon.draw(canvas);
-        }
-
-
-        /*
-         * Draw mountains
-         */
-        private void drawMountain(Canvas canvas, int x, int y, int width, int height) {
-            Path mountain = new Path();
-            mountain.moveTo(x, y);
-            mountain.lineTo(x + width/2, y-height);
-            mountain.lineTo(x + width, y);
-            mountain.close();
-
-            int darkGreen = getResources().getColor(R.color.dark_green);
-            Paint p = new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
-            p.setColor(0xff800000);
-            p.setShader(new LinearGradient(x + width / 2, y, x + width / 2, y - height, Color.BLACK, darkGreen, Shader.TileMode.CLAMP));
-            canvas.drawPath(mountain, p);
         }
 
 
@@ -323,60 +238,8 @@ public class DayNightWallpaperService extends WallpaperService {
 
 
         /*
-         * Current color.
+         * On shared preferences changed.
          */
-        private int getCurrentColor() {
-            return Color.argb(60, currentRed, currentGreen, currentBlue);
-        }
-
-
-        /*
-         * Update current color.
-         */
-        private void updateCurrentColor() {
-            int maxColor = 120;
-            int minColor = 60;
-
-            if (goingUp) {
-                if (currentGreen < maxColor) {
-                    currentGreen++;
-                } else if (currentRed < maxColor) {
-                    currentRed++;
-                } else if (currentBlue < maxColor) {
-                    currentBlue++;
-                } else {
-                    goingUp = false;
-                }
-            }
-
-            if (!goingUp) {
-                if (currentRed > minColor) {
-                    currentRed--;
-                } else if (currentGreen > minColor) {
-                    currentGreen--;
-                } else if (currentBlue > minColor) {
-                    currentBlue--;
-                } else {
-                    goingUp = true;
-                }
-            }
-        }
-
-
-        /*
-         * Update background center.
-         */
-        private void updateCurrentBgCenter() {
-            if (goingUp && backgroundCenterX < 1.0f) {
-                backgroundCenterX += 0.01f;
-            }
-
-            if (!goingUp && backgroundCenterX > 0f) {
-                backgroundCenterX -= 0.01f;
-            }
-
-        }
-
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (key.equals(KEY_PREF_CHOICE)) {
