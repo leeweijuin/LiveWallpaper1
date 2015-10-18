@@ -85,7 +85,7 @@ public class DayNightWallpaperService extends WallpaperService {
          */
         public DayNightWallpaperEngine( ){
             frameRate = 100;
-            gb = new ButterflyGradientBackground();
+            gb = new DragonflyGradientBackground();
 //            setupAnimations();
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(DayNightWallpaperService.this);
@@ -177,7 +177,7 @@ public class DayNightWallpaperService extends WallpaperService {
                     grad.draw(canvas);
 
 //                    if (testCount % 10 == 0 || testCount == 0)
-                        drawButterflies(canvas);
+//                        drawButterflies(canvas);
                 }
             } finally {
                 if (canvas != null)
