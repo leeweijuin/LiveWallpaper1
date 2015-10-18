@@ -5,13 +5,13 @@ import android.graphics.Color;
 
 public class ButterflyGradientBackground extends GradientBackground {
 
-    final int BLUE_COLOR = Color.argb(255, 83, 93, 176);
-    final int DAWN_BLUE_COLOR = Color.argb(255, 62, 68, 125);
-    final int DAWN_PURPLE_COLOR = Color.argb(255, 101, 89, 137);   // should be night/evening purple?
-    final int NIGHT_PURPLE_COLOR = Color.argb(255, 139, 96, 139); // looks more like pink to purple
-    final int DAWN_PINK_COLOR = Color.argb(255, 222, 136, 165);
-    final int NOON_PINK_COLOR = Color.argb(255, 238, 111, 178);
-    final int CREAM_COLOR = Color.argb(255, 255, 206, 187);
+    final private int BLUE_COLOR = Color.argb(255, 83, 93, 176);
+    final private int DAWN_BLUE_COLOR = Color.argb(255, 62, 68, 125);
+    final private int DAWN_PURPLE_COLOR = Color.argb(255, 101, 89, 137);   // should be night/evening purple?
+    final private int NIGHT_PURPLE_COLOR = Color.argb(255, 139, 96, 139); // looks more like pink to purple
+    final private int DAWN_PINK_COLOR = Color.argb(255, 222, 136, 165);
+    final private int NOON_PINK_COLOR = Color.argb(255, 238, 111, 178);
+    final private int CREAM_COLOR = Color.argb(255, 255, 206, 187);
 
     public ButterflyGradientBackground() {
     }
