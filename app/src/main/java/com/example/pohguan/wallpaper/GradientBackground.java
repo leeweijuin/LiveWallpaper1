@@ -39,22 +39,22 @@ public abstract class GradientBackground {
     * Get alpha.
     */
     public int getAlpha(int hourOfDay, int minOfDay) {
-
-        if (hourOfDay <= 6) {
-            myAlpha= 100;
-        } else if (hourOfDay <= 9) {
-            double tt = 180;   //calibrateColor(100, 0, myAlpha, timeFactor);
-            double ct = (hourOfDay - 6)*60 + minOfDay;
-            double timeFactor = ct/tt;
-            myAlpha = calibrateColor(100, 0, myAlpha, timeFactor);
-        } else if (hourOfDay <= 12) {
-            myAlpha = 0;
-        } else if (hourOfDay <= 15) {
-            myAlpha = 0;
+        if (hourOfDay <= 4) {
+            myAlpha = 120;
+        } else if (hourOfDay <= 5) {
+            myAlpha = 150;
+        } else if (hourOfDay <= 7) {
+            myAlpha = 220;
         } else if (hourOfDay <= 18) {
-            myAlpha = 0;
+            myAlpha = 255;
+        } else if (hourOfDay <= 20) {
+            myAlpha = 220;
+        } else if (hourOfDay <= 21) {
+            myAlpha = 180;
+        } else if (hourOfDay <= 22) {
+            myAlpha = 140;
         } else if (hourOfDay <= 23) {
-            myAlpha = 30;
+            myAlpha = 100;
         }
         return myAlpha;
     }
@@ -106,10 +106,13 @@ public abstract class GradientBackground {
     }
 
 
+
+
     /*
     * Calibrate color.
     */
-    public int calibrateColor(int previousColor, int targetColor, int currentColor, double timeFactor) {
+    public int calibrateColor(int previousColor, int targetColor, int currentColor, double timeFactor,
+                              int hourOfDay, int minOfDay) {
         int redDiff = Math.abs(Color.red(targetColor) - Color.red(previousColor));
         int blueDiff = Math.abs(Color.blue(targetColor) - Color.blue(previousColor));
         int greenDiff = Math.abs(Color.green(targetColor) - Color.green(previousColor));
@@ -139,7 +142,7 @@ public abstract class GradientBackground {
         } else if (Color.blue(currentColor) == Color.blue(targetColor)){
             newBlue = Color.blue(targetColor);
         }
-        return Color.argb(100, newRed, newGreen, newBlue);
+        return Color.argb(getAlpha(hourOfDay, minOfDay), newRed, newGreen, newBlue);
 
     }
 

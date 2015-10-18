@@ -22,8 +22,8 @@ public class DragonflyGradientBackground extends GradientBackground {
         double ct = hourOfDay * 60 + minOfDay;
         double timeFactor = ct/tt;
 
-        top = calibrateColor(BLUE_COLOR, NIGHT_PURPLE_COLOR, top, timeFactor);
-        base = calibrateColor(BLUE_COLOR, DAWN_BLUE_COLOR, base, timeFactor);
+        top = calibrateColor(BLUE_COLOR, NIGHT_PURPLE_COLOR, top, timeFactor, hourOfDay, minOfDay);
+        base = calibrateColor(BLUE_COLOR, DAWN_BLUE_COLOR, base, timeFactor, hourOfDay, minOfDay);
     }
 
 
@@ -33,8 +33,8 @@ public class DragonflyGradientBackground extends GradientBackground {
         double ct = (hourOfDay - 18)* 60 + minOfDay;
         double timeFactor = ct/tt;
 
-        top = calibrateColor(DAWN_PURPLE_COLOR, BLUE_COLOR, top, timeFactor);
-        base = calibrateColor(DAWN_PURPLE_COLOR, BLUE_COLOR, base, timeFactor);
+        top = calibrateColor(DAWN_PURPLE_COLOR, BLUE_COLOR, top, timeFactor, hourOfDay, minOfDay);
+        base = calibrateColor(DAWN_PURPLE_COLOR, BLUE_COLOR, base, timeFactor, hourOfDay, minOfDay);
     }
 
 
@@ -45,8 +45,8 @@ public class DragonflyGradientBackground extends GradientBackground {
         double ct = (hourOfDay - 6)*60 + minOfDay;
         double timeFactor = ct/tt;
 
-        top = calibrateColor(NIGHT_PURPLE_COLOR, DAWN_PINK_COLOR, top, timeFactor);
-        base = calibrateColor(DAWN_BLUE_COLOR, DAWN_PURPLE_COLOR, base,timeFactor);
+        top = calibrateColor(NIGHT_PURPLE_COLOR, DAWN_PINK_COLOR, top, timeFactor, hourOfDay, minOfDay);
+        base = calibrateColor(DAWN_BLUE_COLOR, DAWN_PURPLE_COLOR, base,timeFactor, hourOfDay, minOfDay);
     }
 
     public void morningNoon(int hourOfDay, int minOfDay) {
@@ -55,8 +55,8 @@ public class DragonflyGradientBackground extends GradientBackground {
         double ct = (hourOfDay - 9)*60 + minOfDay;
         double timeFactor = ct/tt;
 
-        top = calibrateColor(DAWN_PINK_COLOR, CREAM_COLOR, top, timeFactor);
-        base = calibrateColor(DAWN_PURPLE_COLOR, NOON_PINK_COLOR, base,timeFactor);
+        top = calibrateColor(DAWN_PINK_COLOR, CREAM_COLOR, top, timeFactor, hourOfDay, minOfDay);
+        base = calibrateColor(DAWN_PURPLE_COLOR, NOON_PINK_COLOR, base,timeFactor, hourOfDay, minOfDay);
     }
 
     public void noonEvening(int hourOfDay, int minOfDay) {
@@ -65,8 +65,8 @@ public class DragonflyGradientBackground extends GradientBackground {
         double ct = (hourOfDay - 12)*60 + minOfDay;
         double timeFactor = ct/tt;
 
-        top = calibrateColor(CREAM_COLOR, CREAM_COLOR, top, timeFactor);
-        base = calibrateColor(NOON_PINK_COLOR, DAWN_PINK_COLOR, base,timeFactor);
+        top = calibrateColor(CREAM_COLOR, CREAM_COLOR, top, timeFactor, hourOfDay, minOfDay);
+        base = calibrateColor(NOON_PINK_COLOR, DAWN_PINK_COLOR, base,timeFactor, hourOfDay, minOfDay);
     }
 
     public void eveningNight(int hourOfDay, int minOfDay) {
@@ -75,8 +75,8 @@ public class DragonflyGradientBackground extends GradientBackground {
         double ct = (hourOfDay - 15)*60 + minOfDay;
         double timeFactor = ct/tt;
 
-        top = calibrateColor(CREAM_COLOR, NOON_PINK_COLOR, top, timeFactor);
-        base = calibrateColor(DAWN_PINK_COLOR, DAWN_PURPLE_COLOR, base, timeFactor);
+        top = calibrateColor(CREAM_COLOR, NOON_PINK_COLOR, top, timeFactor, hourOfDay, minOfDay);
+        base = calibrateColor(DAWN_PINK_COLOR, DAWN_PURPLE_COLOR, base, timeFactor, hourOfDay, minOfDay);
     }
 
 
