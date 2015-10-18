@@ -52,4 +52,25 @@ public class TimeManager {
         return c.get(Calendar.MINUTE);
     }
 
+
+    /*
+     * Is Noon.
+     */
+    public boolean isNoon() {
+        if (getHour() >= 11 && getHour() <= 13) {
+            return true;
+        }
+        return false;
+    }
+
+    /*
+     * Is Evening.
+     */
+    public boolean isEvening() {
+        if (getHour() >= 19 || getHour() <= 7) {
+            return true;
+        }
+        return false;
+    }
+
 }

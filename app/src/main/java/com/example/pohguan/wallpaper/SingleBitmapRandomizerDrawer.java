@@ -94,11 +94,10 @@ public class SingleBitmapRandomizerDrawer implements BitmapAnimationDrawer {
      * Set scale of bitmap.
      */
     private void setScale() {
-        int hour = timeManager.getHour();
-        if (hour >= 11 && hour <= 13) {
+        if (timeManager.isNoon()) {
             xScale = 1;
             yScale = 1;
-        } else if (hour >= 19 || hour <= 7) {
+        } else if (timeManager.isEvening()) {
             xScale = 0.3f;
             yScale = 0.3f;
         } else {

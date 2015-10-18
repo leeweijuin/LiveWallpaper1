@@ -128,7 +128,7 @@ public class DayNightWallpaperService extends WallpaperService {
 
         @Override
         public void onTouchEvent(MotionEvent event) {
-            if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            if (event.getActionMasked() == MotionEvent.ACTION_UP) {
                 SurfaceHolder holder = getSurfaceHolder();
                 float x = event.getX();
                 float y = event.getY();
@@ -136,8 +136,6 @@ public class DayNightWallpaperService extends WallpaperService {
 
             super.onTouchEvent(event);
         }
-
-
 
 
         /**
@@ -190,7 +188,23 @@ public class DayNightWallpaperService extends WallpaperService {
          * Draw butterflies.
          */
         private void drawButterflies(Canvas canvas) {
-            butterflyDrawer.drawFrame(canvas);
+            for (int i=0; i<noOfButterflies(); i++) {
+                butterflyDrawer.drawFrame(canvas);
+            }
+        }
+
+
+        /*
+         * Number of butterflies.
+         */
+        private int noOfButterflies() {
+            if (timeManager.isNoon()) {
+                return 3;
+            } else if (timeManager.isEvening()) {
+                return 5;
+            } else {
+                return 4;
+            }
         }
 
 
