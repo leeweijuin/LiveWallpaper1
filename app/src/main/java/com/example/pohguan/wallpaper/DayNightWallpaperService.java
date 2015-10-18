@@ -61,11 +61,6 @@ public class DayNightWallpaperService extends WallpaperService {
         private GradientBackground gb;
 
         /*
-        * Test count.
-        */
-        private int testCount;
-
-        /*
          * Animation drawers
          */
         private List<BitmapAnimationDrawer> animations;
@@ -80,6 +75,11 @@ public class DayNightWallpaperService extends WallpaperService {
          */
         public static final String KEY_PREF_CHOICE = "choice";
 
+        /*
+         * Time manager.
+         */
+        private TimeManager timeManager;
+
         /**
          * Constructor.
          */
@@ -87,6 +87,7 @@ public class DayNightWallpaperService extends WallpaperService {
             frameRate = 100;
             gb = new ButterflyGradientBackground();
 //            setupAnimations();
+            timeManager = new TimeManager();
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(DayNightWallpaperService.this);
             setupRandomizer(prefs.getString(KEY_PREF_CHOICE, "butterflyKey"));
@@ -137,21 +138,7 @@ public class DayNightWallpaperService extends WallpaperService {
         }
 
 
-        /*
-         * Get hour.
-         */
-        public int getHour() {
-            Calendar c = Calendar.getInstance();
-            return testCount/60;
-        }
 
-
-        /*
-        * Get minute.
-        */
-        public int getMinute() {
-            return testCount % 60;
-        }
 
         /**
          * Draw generic.
@@ -160,15 +147,15 @@ public class DayNightWallpaperService extends WallpaperService {
             SurfaceHolder holder = getSurfaceHolder();
             Canvas canvas = null;
 
-            if (testCount == 1440) testCount = 0;
-            else testCount+=10;
+            if (timeManager.testCount == 1440) timeManager.testCount = 0;
+            else timeManager.testCount+=10;
 
             try {
                 canvas = holder.lockCanvas();
                 if (canvas != null) {
                     canvas.drawColor(getResources().getColor(android.R.color.black));
 
-                    int[] colors = gb.getCurrentGradientColor(getHour(), getMinute());
+                    int[] colors = gb.getCurrentGradientColor(timeManager.getHour(), timeManager.getMinute());
 
                     GradientDrawable grad = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
                     grad.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -233,10 +220,10 @@ public class DayNightWallpaperService extends WallpaperService {
         private void setupRandomizer(String choice) {
             if (choice.equals("butterflyKey")) {
                 Bitmap butterfly = BitmapFactory.decodeResource(getResources(), R.drawable.butterfly);
-                butterflyDrawer = new SingleBitmapRandomizerDrawer(butterfly, 0, 0);
+                butterflyDrawer = new SingleBitmapRandomizerDrawer(butterfly, 0, 0, timeManager);
             } else if (choice.equals("dragonflyKey")) {
                 Bitmap dragonfly = BitmapFactory.decodeResource(getResources(), R.drawable.dragonfly);
-                butterflyDrawer = new SingleBitmapRandomizerDrawer(dragonfly, 0, 0);
+                butterflyDrawer = new SingleBitmapRandomizerDrawer(dragonfly, 0, 0, timeManager);
             } else {
                 Log.d("Choice not found: ", choice);
             }

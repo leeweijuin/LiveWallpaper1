@@ -35,23 +35,29 @@ public class SingleBitmapRandomizerDrawer implements BitmapAnimationDrawer {
     /*
      * xScale.
      */
-    private int xScale;
+    private float xScale;
 
     /*
      * yScale.
      */
-    private int yScale;
+    private float yScale;
+
+    /*
+     * Time manager.
+     */
+    private TimeManager timeManager;
 
     /*
      * Constructor.
      */
-    public SingleBitmapRandomizerDrawer(Bitmap bm, int left, int top) {
+    public SingleBitmapRandomizerDrawer(Bitmap bm, int left, int top, TimeManager timeManager) {
         this.bm = bm;
         this.left = left - bm.getWidth()/2;
         this.top = top - bm.getHeight()/2;
         this.angle = 0f;
         this.xScale = 1;
         this.yScale = 1;
+        this.timeManager = timeManager;
     }
 
 
@@ -79,6 +85,26 @@ public class SingleBitmapRandomizerDrawer implements BitmapAnimationDrawer {
 
         left = (int) ((r.nextFloat()*(canvas.getWidth()- 2*offScreenOffsetX))+offScreenOffsetX);
         top = (int) ((r.nextFloat()*(canvas.getHeight()- 2*offScreenOffsetY))+offScreenOffsetY);
+
+        setScale();
     }
 
+
+    /*
+     * Set scale of bitmap.
+     */
+    private void setScale() {
+        int hour = timeManager.getHour();
+        if (hour >= 11 && hour <= 13) {
+            xScale = 1;
+            yScale = 1;
+        } else if (hour >= 19 || hour <= 7) {
+            xScale = 0.3f;
+            yScale = 0.3f;
+        } else {
+            xScale = 0.6f;
+            yScale = 0.6f;
+        }
+
+    }
 }
