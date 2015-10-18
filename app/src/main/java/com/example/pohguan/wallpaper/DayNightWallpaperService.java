@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -165,15 +166,18 @@ public class DayNightWallpaperService extends WallpaperService {
             try {
                 canvas = holder.lockCanvas();
                 if (canvas != null) {
-                    //canvas.drawColor(getResources().getColor(android.R.color.black));
-                    canvas.drawColor(Color.argb(gb.getAlpha(getHour(), getMinute()), 0, 0, 0));
+                    canvas.drawColor(getResources().getColor(android.R.color.black));
+
                     int[] colors = gb.getCurrentGradientColor(getHour(), getMinute());
 
                     GradientDrawable grad = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
                     grad.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                    //grad.setTintMode(PorterDuff.Mode.DST_IN);
+//                    grad.setColorFilter(null);
                     grad.draw(canvas);
 
-                    drawButterflies(canvas);
+//                    if (testCount % 10 == 0 || testCount == 0)
+                        drawButterflies(canvas);
                 }
             } finally {
                 if (canvas != null)
@@ -208,16 +212,18 @@ public class DayNightWallpaperService extends WallpaperService {
          */
         private void setupAnimations() {
             Bitmap cloud = BitmapFactory.decodeResource(getResources(), R.drawable.butterfly);
-            Bitmap sailboat = BitmapFactory.decodeResource(getResources(), R.drawable.sailboat);
+            Bitmap sailboat = BitmapFactory.decodeResource(getResources(), R.drawable.dragonfly);
 
             SingleBitmapAnimationDrawer cloudDrawer = new SingleBitmapAnimationDrawer(cloud, -cloud.getWidth(), 220, 5, 0);
             SingleBitmapAnimationDrawer cloudDrawer2 = new SingleBitmapAnimationDrawer(cloud, -cloud.getWidth()*3, 420, 8, 0);
             SingleBitmapAnimationDrawer sailboatDrawer = new SingleBitmapAnimationDrawer(sailboat, -sailboat.getWidth(), 1000, 8, 0);
 
             animations = new ArrayList<>();
-            animations.add(cloudDrawer);
+//            animations.add(cloudDrawer);
+/*
             animations.add(cloudDrawer2);
             animations.add(sailboatDrawer);
+*/
         }
 
 
