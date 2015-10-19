@@ -98,6 +98,7 @@ public class DayNightWallpaperService extends WallpaperService {
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(DayNightWallpaperService.this);
             setupRandomizer(prefs.getString(KEY_PREF_CHOICE, "butterflyKey"));
+            setupGradientBg(prefs.getString(KEY_PREF_CHOICE, "butterflyKey"));
             energySaving = prefs.getBoolean(KEY_PREF_ENERGY, false);
             handler.post(drawRunner);
         }
@@ -255,12 +256,28 @@ public class DayNightWallpaperService extends WallpaperService {
 
 
         /*
+         * Setup Gradient background.
+         */
+        private void setupGradientBg(String choice) {
+            if (choice.equals("butterflyKey")) {
+                gb = new ButterflyGradientBackground();
+            } else if (choice.equals("dragonflyKey")) {
+                gb = new DragonflyGradientBackground();
+            } else {
+                Log.d("Choice not found: ", choice);
+            }
+
+        }
+
+
+        /*
          * On shared preferences changed.
          */
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (key.equals(KEY_PREF_CHOICE)) {
                 setupRandomizer(sharedPreferences.getString(KEY_PREF_CHOICE, "butterflyKey"));
+                setupGradientBg(sharedPreferences.getString(KEY_PREF_CHOICE, "butterflyKey"));
             } else if (key.equals(KEY_PREF_ENERGY)) {
                 energySaving = sharedPreferences.getBoolean(KEY_PREF_ENERGY, false);
                 if (energySaving) {
