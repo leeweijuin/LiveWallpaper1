@@ -4,8 +4,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -15,7 +13,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -51,6 +48,11 @@ public class DayNightWallpaperService extends WallpaperService {
         private boolean visible;
 
         /*
+         * Energy saving.
+         */
+        private boolean energySaving;
+
+        /*
          * Frame rate (in milliseconds).
          */
         private int frameRate;
@@ -76,6 +78,11 @@ public class DayNightWallpaperService extends WallpaperService {
         public static final String KEY_PREF_CHOICE = "choice";
 
         /*
+         * Energy saving key.
+         */
+        public static final String KEY_PREF_ENERGY = "energySavingKey";
+
+        /*
          * Time manager.
          */
         private TimeManager timeManager;
@@ -91,6 +98,7 @@ public class DayNightWallpaperService extends WallpaperService {
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(DayNightWallpaperService.this);
             setupRandomizer(prefs.getString(KEY_PREF_CHOICE, "butterflyKey"));
+            energySaving = prefs.getBoolean(KEY_PREF_ENERGY, false);
             handler.post(drawRunner);
         }
 
@@ -170,7 +178,9 @@ public class DayNightWallpaperService extends WallpaperService {
             }
 
             handler.removeCallbacks(drawRunner);
-            handler.postDelayed(drawRunner, frameRate);
+            if (!energySaving) {
+                handler.postDelayed(drawRunner, frameRate);
+            }
         }
 
 
@@ -251,6 +261,13 @@ public class DayNightWallpaperService extends WallpaperService {
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (key.equals(KEY_PREF_CHOICE)) {
                 setupRandomizer(sharedPreferences.getString(KEY_PREF_CHOICE, "butterflyKey"));
+            } else if (key.equals(KEY_PREF_ENERGY)) {
+                energySaving = sharedPreferences.getBoolean(KEY_PREF_ENERGY, false);
+                if (energySaving) {
+                    handler.removeCallbacks(drawRunner);
+                } else {
+                    handler.post(drawRunner);
+                }
             }
         }
     }

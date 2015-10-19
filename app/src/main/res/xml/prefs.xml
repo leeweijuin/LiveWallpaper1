@@ -8,6 +8,10 @@
         android:entryValues="@array/patternValues"
         android:defaultValue="butterflyKey"/>
 
+    <CheckBoxPreference
+        android:key="energySavingKey"
+        android:title="Energy saving mode"
+        android:defaultValue="false" />
 
     <Preference android:title="@string/store_link" >
         <intent android:action="android.intent.action.VIEW"
