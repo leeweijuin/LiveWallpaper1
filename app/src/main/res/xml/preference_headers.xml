@@ -2,7 +2,7 @@
 <preference-headers
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <header android:fragment="com.example.pohguan.wallpaper.WallpaperPreferencesActivity$GraphicPrefFragment"
+    <header android:fragment="com.inventionMansion.liveWallpaper.butterfly.WallpaperPreferencesActivity$GraphicPrefFragment"
         android:title="Graphic Options"
         android:summary="Some graphical options." />
 

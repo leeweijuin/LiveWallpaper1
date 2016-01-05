@@ -1,0 +1,90 @@
+package com.inventionMansion.liveWallpaper.butterfly;
+
+import android.graphics.Color;
+
+
+public class ButterflyGradientBackground extends GradientBackground {
+
+    final private int BLUE_COLOR = Color.argb(255, 83, 93, 176);
+    final private int DAWN_BLUE_COLOR = Color.argb(255, 62, 68, 125);
+    final private int DAWN_PURPLE_COLOR = Color.argb(255, 101, 89, 137);   // should be night/evening purple?
+    final private int NIGHT_PURPLE_COLOR = Color.argb(255, 139, 96, 139); // looks more like pink to purple
+    final private int DAWN_PINK_COLOR = Color.argb(255, 222, 136, 165);
+    final private int NOON_PINK_COLOR = Color.argb(255, 238, 111, 178);
+    final private int CREAM_COLOR = Color.argb(255, 255, 206, 187);
+
+
+    public ButterflyGradientBackground() {
+    }
+
+
+    public void midnightDawn(int hourOfDay, int minOfDay)  {
+        //target purple to dark blue, 00 - 6am
+        double tt = 360;
+        double ct = hourOfDay * 60 + minOfDay;
+        double timeFactor = ct/tt;
+
+        top = calibrateColor(BLUE_COLOR, NIGHT_PURPLE_COLOR, top, timeFactor, hourOfDay, minOfDay);
+        base = calibrateColor(BLUE_COLOR, DAWN_BLUE_COLOR, base, timeFactor, hourOfDay, minOfDay);
+    }
+
+
+
+
+
+    public void dawnMorning(int hourOfDay, int minOfDay) {
+        // target pink to purple   (6am - 9am)
+        double tt = 180;
+        double ct = (hourOfDay - 6)*60 + minOfDay;
+        double timeFactor = ct/tt;
+
+        top = calibrateColor(NIGHT_PURPLE_COLOR, DAWN_PINK_COLOR, top, timeFactor, hourOfDay, minOfDay);
+        base = calibrateColor(DAWN_BLUE_COLOR, DAWN_PURPLE_COLOR, base,timeFactor, hourOfDay, minOfDay);
+    }
+
+    public void morningNoon(int hourOfDay, int minOfDay) {
+        //target white to pink (9am - 12noon)
+        double tt = 180;
+        double ct = (hourOfDay - 9)*60 + minOfDay;
+        double timeFactor = ct/tt;
+
+        top = calibrateColor(DAWN_PINK_COLOR, CREAM_COLOR, top, timeFactor, hourOfDay, minOfDay);
+        base = calibrateColor(DAWN_PURPLE_COLOR, NOON_PINK_COLOR, base,timeFactor, hourOfDay, minOfDay);
+    }
+
+    public void noonEvening(int hourOfDay, int minOfDay) {
+        //target pink to purple (12noon - 3pm)
+        double tt = 180;
+        double ct = (hourOfDay - 12)*60 + minOfDay;
+        double timeFactor = ct/tt;
+
+        top = calibrateColor(CREAM_COLOR, CREAM_COLOR, top, timeFactor, hourOfDay, minOfDay);
+        base = calibrateColor(NOON_PINK_COLOR, DAWN_PINK_COLOR, base,timeFactor, hourOfDay, minOfDay);
+    }
+
+    public void eveningNight(int hourOfDay, int minOfDay) {
+        //target purple to darkblue. (4pm - 7pm)
+        double tt = 180;
+        double ct = (hourOfDay - 15)*60 + minOfDay;
+        double timeFactor = ct/tt;
+
+        top = calibrateColor(CREAM_COLOR, NOON_PINK_COLOR, top, timeFactor, hourOfDay, minOfDay);
+        base = calibrateColor(DAWN_PINK_COLOR, NIGHT_PURPLE_COLOR, base, timeFactor, hourOfDay, minOfDay);
+    }
+
+
+    public void nightMidnight(int hourOfDay, int minOfDay) {
+        //target dark blue to darkblue , 6pm - midnight
+        double tt = 360;
+        double ct = (hourOfDay - 18)* 60 + minOfDay;
+        double timeFactor = ct/tt;
+
+        top = calibrateColor(NOON_PINK_COLOR,BLUE_COLOR, top, timeFactor, hourOfDay, minOfDay);
+        base = calibrateColor(NIGHT_PURPLE_COLOR, BLUE_COLOR, base, timeFactor, hourOfDay, minOfDay);
+
+/*
+        top = calibrateColor(DAWN_PURPLE_COLOR, BLUE_COLOR, top, timeFactor);
+        base = calibrateColor(DAWN_PURPLE_COLOR, BLUE_COLOR, base, timeFactor);
+   */ }
+
+}
